@@ -19,9 +19,9 @@ export default class ProductCard {
 
     const button = card.querySelector('.card__button');
     button.addEventListener('click', () => { 
-      const customEvent = new CustomEvent("product-add", { // имя события должно быть именно "product-add"
-        detail: product.id, // Уникальный идентификатора товара из объекта товара
-        bubbles: true // это событие всплывает - это понадобится в дальнейшем
+      const customEvent = new CustomEvent("product-add", { 
+        detail: product.id, // Я сделал это без this, но все равно отрабатывает корректно
+        bubbles: true 
       });
       button.dispatchEvent(customEvent);
     })

@@ -30,7 +30,7 @@
  */
 export default class UserTable {
   constructor(rows) {
-    let rowsArray = rows.map((item) => {
+    let rowsArray = rows.map((item) => { //делаю без this
       let row = `
         <tr>
           <td>${item.name}</td>
