@@ -2,9 +2,9 @@ import createElement from '../../assets/lib/create-element.js';
 
 export default class Modal {
   constructor() {
-    this.modal = document.createElement('div');
-    this.modal.classList.add('modal');
-    this.modal.innerHTML = `
+    this.elem = document.createElement('div');
+    this.elem.classList.add('modal');
+    this.elem.innerHTML = `
       <div class="modal__overlay"></div>
 
       <div class="modal__inner">
@@ -23,33 +23,33 @@ export default class Modal {
         </div>
       </div>
     `; 
-    this.buttonClose = this.modal.querySelector('.modal__close');
+    this.buttonClose = this.elem.querySelector('.modal__close');
     this.buttonClose.addEventListener('click', () => { this.close() });
     this.keydownListenerFunc = (evt) => {
       if (evt.code === "Escape") {
-        this.modal.remove();
+        this.elem.remove();
         document.body.classList.remove('is-modal-open');
       }
     };
   }
 
   open() { 
-    document.querySelector('.container').append(this.modal);
+    document.querySelector('.container').append(this.elem);
     document.body.classList.add('is-modal-open');
 
     document.addEventListener('keydown', this.keydownListenerFunc);
   }
 
   setTitle(title) { 
-    this.modal.querySelector('.modal__title').innerHTML = title;
+    this.elem.querySelector('.modal__title').innerHTML = title;
   }
 
   setBody(modalBody) {
-    this.modal.querySelector('.modal__body').append(modalBody);
+    this.elem.querySelector('.modal__body').append(modalBody);
   }
 
   close() { 
-    this.modal.remove();
+    this.elem.remove();
     document.body.classList.remove('is-modal-open');
     document.removeEventListener('keydown', this.keydownListenerFunc);
   }
