@@ -25,17 +25,19 @@ export default class Modal {
     `; 
     this.buttonClose = this.modal.querySelector('.modal__close');
     this.buttonClose.addEventListener('click', () => { this.close() });
-    document.addEventListener('keydown', (evt) => {
-      if (evt.code === "Escape") { 
+    this.keydownListenerFunc = (evt) => {
+      if (evt.code === "Escape") {
         this.modal.remove();
         document.body.classList.remove('is-modal-open');
       }
-     });
+    };
   }
 
   open() { 
     document.querySelector('.container').append(this.modal);
     document.body.classList.add('is-modal-open');
+
+    document.addEventListener('keydown', this.keydownListenerFunc);
   }
 
   setTitle(title) { 
@@ -49,5 +51,6 @@ export default class Modal {
   close() { 
     this.modal.remove();
     document.body.classList.remove('is-modal-open');
+    document.removeEventListener('keydown', this.keydownListenerFunc);
   }
 }
