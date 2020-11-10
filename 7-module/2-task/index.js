@@ -25,16 +25,10 @@ export default class Modal {
     `; 
     this.buttonClose = this.elem.querySelector('.modal__close');
     this.buttonClose.addEventListener('click', () => { this.close() });
-    this.keydownListenerFunc = (evt) => {
-      if (evt.code === "Escape") {
-        this.elem.remove();
-        document.body.classList.remove('is-modal-open');
-      }
-    };
   }
 
   open() { 
-    document.querySelector('.container').append(this.elem);
+    document.body.append(this.elem);
     document.body.classList.add('is-modal-open');
 
     document.addEventListener('keydown', this.keydownListenerFunc);
@@ -53,4 +47,10 @@ export default class Modal {
     document.body.classList.remove('is-modal-open');
     document.removeEventListener('keydown', this.keydownListenerFunc);
   }
+
+  keydownListenerFunc = (evt) => {
+    if (evt.code === "Escape") {
+      this.close();
+    }
+  };
 }
