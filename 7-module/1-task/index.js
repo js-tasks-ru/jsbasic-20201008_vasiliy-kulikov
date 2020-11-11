@@ -4,21 +4,8 @@ export default class RibbonMenu {
   constructor(categories) {
     this.categories = categories;
     this.render();  
-
-    this.buttonLeft = this.elem.querySelector('.ribbon__arrow_left');
-    this.buttonRight = this.elem.querySelector('.ribbon__arrow_right');
-
-    this.buttonLeft.addEventListener('click', () => this.clickLeft());
-    this.buttonRight.addEventListener('click', () => this.clickRight());
-
-    this.ribbonInner = this.elem.querySelector('.ribbon__inner');
-
-    this.ribbonInner.onscroll = this.scrollMenu; 
-
-    this.links = this.elem.querySelectorAll('.ribbon__item');
-
+    this.init();
     this.clickLink();
-    
   }
   
   clickLeft() { 
@@ -109,5 +96,19 @@ export default class RibbonMenu {
     menu.innerHTML = menuHtml;
 
     this.elem = menu;
+  }
+
+  init() { 
+    this.buttonLeft = this.elem.querySelector('.ribbon__arrow_left');
+    this.buttonRight = this.elem.querySelector('.ribbon__arrow_right');
+
+    this.buttonLeft.addEventListener('click', () => this.clickLeft());
+    this.buttonRight.addEventListener('click', () => this.clickRight());
+
+    this.ribbonInner = this.elem.querySelector('.ribbon__inner');
+
+    this.ribbonInner.onscroll = this.scrollMenu; 
+
+    this.links = this.elem.querySelectorAll('.ribbon__item');
   }
 }
