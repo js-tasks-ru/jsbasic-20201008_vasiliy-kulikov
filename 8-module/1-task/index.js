@@ -43,24 +43,30 @@ export default class CartIcon {
 
     if (window.innerWidth <= 767) return;
 
-    if (this.elem.getBoundingClientRect().top <= 0) this.position();
+    if (this.elem.getBoundingClientRect().top <= 0) this.positionFixed();
     
-    window.addEventListener('resize', this.position());
+    if (window.pageYOffset <= this.elem.getBoundingClientRect().top) this.positionAbsolute();
   }
 
-  position() { 
+  positionFixed() { 
     this.container = document.body.querySelector('.container');
     this.containerSize = this.container.getBoundingClientRect();
+    
     
     this.elem.style.position = 'fixed';
     this.elem.style.zIndex = 1000;
     this.elem.style.left = this.containerSize.x + this.containerSize.width + 20 + 'px';
-    console.log(parseInt(this.elem.style.left) + this.elem.getBoundingClientRect().width);
 
     if (parseInt(this.elem.style.left) + this.elem.getBoundingClientRect().width + 10 >= document.documentElement.clientWidth) { 
       this.elem.style.left = '';
       this.elem.style.right = '10px';
       
     }
+  }
+
+  positionAbsolute() { 
+    this.elem.style.left = '';
+    this.elem.style.right = 0;
+    this.elem.style.position = 'absolute';
   }
 }

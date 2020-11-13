@@ -52,7 +52,9 @@ export default class StepSlider {
       child.className = '';
     }
 
-    this.blockStepsChildren[this.value].classList.add('slider__step-active');
+    if(this.blockStepsChildren[this.value]) {
+      this.blockStepsChildren[this.value].classList.add('slider__step-active')
+    };
   }
 
   click = (evt) => { 
