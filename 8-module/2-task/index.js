@@ -5,19 +5,8 @@ export default class ProductGrid {
   constructor(products) {
     this.products = products;
     this.filters = { };
-    this.filterProducts();
+    this.targetProducts = this.products;
     this.render();
-  }
-
-  filterProducts() {
-
-    let filterKeys = Object.keys(this.filters);
-
-    if (filterKeys.length > 0) {
-      this.targetProducts = this.products.filter(product => filterKeys.every(key => this.filters[key] === product[key]));
-    } else { 
-      this.targetProducts = this.products;
-    }
   }
 
   render() { 
@@ -37,17 +26,29 @@ export default class ProductGrid {
   updateFilter(filters) { 
     
     this.gridInner.remove();
-    this.filters = {};
-
+    
     for (let filter in filters) { 
-      if (filter === "noNuts" && filters[filter] === true) this.filters["nuts"] = undefined;
-      if (filter === "vegeterianOnly") this.filters["vegeterian"] = filters[filter];
-      if (filter === "maxSpiciness") this.filters["spiciness"] = filters[filter];
-      if (filter === "category") this.filters["category"] = filters[filter];
+      this.filters[filter] = filters[filter];
     }
 
-    console.log(this.filters);
-    this.filterProducts();
+    this.targetProducts = this.products;
+
+    if (this.filters['noNuts'] === true) { 
+      this.targetProducts = this.targetProducts.filter(product => product["nuts"] !== true);
+    } 
+
+    if (this.filters['vegeterianOnly'] === true) { 
+      this.targetProducts = this.targetProducts.filter(product => product["vegeterian"] === true);
+    }
+
+    if (this.filters['maxSpiciness'] >= 0) { 
+      this.targetProducts = this.targetProducts.filter(product => product["spiciness"] <= this.filters['maxSpiciness']);
+    }
+
+    if ( this.filters['category'] )  {
+      this.targetProducts = this.targetProducts.filter(product => product["category"] === this.filters['category']);
+    }    
+    
     this.render();
     document.querySelector('.products-grid').append(this.gridInner);
   }
