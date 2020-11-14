@@ -25,7 +25,7 @@ export default class ProductGrid {
 
   updateFilter(filters) { 
     
-    this.gridInner.remove();
+    this.gridInner.innerHTML = '';
     
     for (let filter in filters) { 
       this.filters[filter] = filters[filter];
@@ -49,7 +49,9 @@ export default class ProductGrid {
       this.targetProducts = this.targetProducts.filter(product => product["category"] === this.filters['category']);
     }    
     
-    this.render();
-    document.querySelector('.products-grid').append(this.gridInner);
+    for (let i = 0; i < this.targetProducts.length; i++) { 
+      let card = new ProductCard(this.targetProducts[i]);
+      this.gridInner.append(card.elem);
+    }
   }
 }
