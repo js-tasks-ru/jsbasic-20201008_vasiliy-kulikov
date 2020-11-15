@@ -17,16 +17,20 @@ export default class Cart {
       this.cartItem = { product, count: 1 };
       this.cartItems.push(this.cartItem);
     } else {
-      this.cartItems.forEach(item => {
-        if (item.product.id === product.id) {
-          item.count++;
-          this.cartItem = item;
-        } else {
-          this.cartItem = { product, count: 1 };
-          this.cartItems.push(this.cartItem);
+      let itemFind = false;
+
+      for (let i = 0; i < this.cartItems.length; i++) { 
+        if (this.cartItems[i].product.id === product.id) {
+          this.cartItems[i].count++;
+          itemFind = true;
         }
-      });
-    }
+      }
+
+      if (!itemFind) { 
+        this.cartItem = { product, count: 1 };
+        this.cartItems.push(this.cartItem);
+      }
+    } 
 
     this.onProductUpdate(this.cartItem);
   }
@@ -132,6 +136,7 @@ export default class Cart {
   }
 
   onProductUpdate(cartItem) {
+
     if (document.body.className === 'is-modal-open') {
       let modalBody = document.querySelector('.modal__body');
       let productId = cartItem.product.id;
@@ -143,6 +148,10 @@ export default class Cart {
       productPrice.textContent = `€${(cartItem.count * cartItem.product.price).toFixed(2)}`;
       infoPrice.innerHTML = `€${this.getTotalPrice().toFixed(2)}`;
 
+      if (cartItem.count === 0 && this.cartItems.length != 0) { 
+        this.modalBody.querySelector(`[data-product-id='${cartItem.product.id}']`).remove();
+      }
+      
       if (this.isEmpty()) this.modal.close();
     }
 
