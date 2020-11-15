@@ -16,7 +16,7 @@ export default class Cart {
     if (this.cartItems.length === 0) {
       this.cartItem = { product, count: 1 };
       this.cartItems.push(this.cartItem);
-    } else { 
+    } else {
       this.cartItems.forEach(item => {
         if (item.product.id === product.id) {
           item.count++;
@@ -28,14 +28,14 @@ export default class Cart {
       });
     }
 
-    this.onProductUpdate(this.cartItem);  
+    this.onProductUpdate(this.cartItem);
   }
 
   updateProductCount(productId, amount) {
     let cartItem = this.cartItems.find(item => item.product.id === productId);
     cartItem.count += amount;
 
-    if (cartItem.count === 0) { 
+    if (cartItem.count === 0) {
       let cartIndex = this.cartItems.findIndex(item => item.product.id === productId);
       this.cartItems.splice(cartIndex, 1);
     }
@@ -61,9 +61,8 @@ export default class Cart {
 
   renderProduct(product, count) {
     return createElement(`
-    <div class="cart-product" data-product-id="${
-      product.id
-    }">
+    <div class="cart-product" data-product-id="${product.id
+      }">
       <div class="cart-product__img">
         <img src="/assets/images/products/${product.image}" alt="product">
       </div>
@@ -101,8 +100,8 @@ export default class Cart {
           <div class="cart-buttons__info">
             <span class="cart-buttons__info-text">total</span>
             <span class="cart-buttons__info-price">€${this.getTotalPrice().toFixed(
-              2
-            )}</span>
+      2
+    )}</span>
           </div>
           <button type="submit" class="cart-buttons__button btn-group__button button">order</button>
         </div>
@@ -111,28 +110,39 @@ export default class Cart {
   }
 
   renderModal() {
-    let modalBody = document.createElement('div');
-    
-    let modalProducts = this.cartItems.map(item => this.renderProduct(item.product, item.count));
-    modalBody.innerHTML = `
-      ${modalProducts.join('')}
-      ${this.renderOrderForm()}
-    `
-    console.log(modalBody);
-    /*modalBody.innerHTML = `
-      ${this.renderProduct};
-      ${this.renderOrderForm};
-    `*/
+    let modalBodyContent = document.createElement('div');
 
-    let modal = new Modal();
-    modal.setTitle('Your order');
-    modal.setBody(createElement(modalBody));
+    this.cartItems.forEach(item => {
+      modalBodyContent.append(this.renderProduct(item.product, item.count));
+    });
 
-    modal.open();
+    modalBodyContent.append(this.renderOrderForm());
+
+    this.modal = new Modal();
+    this.modal.setTitle('Your order');
+    this.modal.setBody(modalBodyContent);
+    this.modal.open();
+
+    let modalBody = document.querySelector('.modal__body');
+
+    modalBody.addEventListener('click', (evt) => this.buttonQuantityIdentification(evt));
+
   }
 
   onProductUpdate(cartItem) {
-    // ...ваш код
+    if (document.body.className === 'is-modal-open') {
+      let modalBody = document.querySelector('.modal__body');
+      let productId = cartItem.product.id;
+      let productCount = modalBody.querySelector(`[data-product-id="${productId}"] .cart-counter__count`);
+      let productPrice = modalBody.querySelector(`[data-product-id="${productId}"] .cart-product__price`);
+      let infoPrice = modalBody.querySelector(`.cart-buttons__info-price`);
+
+      productCount.textContent = cartItem.count;
+      productPrice.textContent = `€${(cartItem.count * cartItem.product.price).toFixed(2)}`;
+      infoPrice.innerHTML = `€${this.getTotalPrice().toFixed(2)}`;
+
+      if (this.isEmpty()) this.modal.close();
+    }
 
     this.cartIcon.update(this);
   }
@@ -143,6 +153,31 @@ export default class Cart {
 
   addEventListeners() {
     this.cartIcon.elem.onclick = () => this.renderModal();
+  }
+
+  buttonQuantityIdentification = (evt) => {
+    if (Array.from(evt.target.classList).includes('cart-counter__button')) { 
+      this.buttonQuantity = evt.target;
+    };
+
+    if (evt.target.tagName === 'IMG' && evt.target.closest('button')) { 
+      if (Array.from(evt.target.closest('button').classList).includes('cart-counter__button')) { 
+        this.buttonQuantity = evt.target.closest('button');
+      }
+    }
+
+    if (Array.from(this.buttonQuantity.classList).includes('cart-counter__button_minus')) { 
+      this.amount = -1;
+    }
+
+    if (Array.from(this.buttonQuantity.classList).includes('cart-counter__button_plus')) { 
+      this.amount = 1;
+    }
+
+    if (this.buttonQuantity) { 
+      this.productId = this.buttonQuantity.closest('.cart-product').dataset.productId;
+      this.updateProductCount(this.productId, this.amount);
+    }
   }
 }
 

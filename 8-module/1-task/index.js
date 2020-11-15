@@ -39,20 +39,19 @@ export default class CartIcon {
   }
 
   updatePosition() {
+    this.container = document.body.querySelector('.container');
+    this.containerSize = this.container.getBoundingClientRect();
+
     if (this.elem.offsetWidth === 0 || this.elem.offsetHeight === 0) return; 
 
     if (window.innerWidth <= 767) return;
 
-    if (this.elem.getBoundingClientRect().top <= 0) this.positionFixed();
+    if (window.pageYOffset >= parseInt(getComputedStyle(this.elem).top)) this.positionFixed();
     
     if (window.pageYOffset <= this.elem.getBoundingClientRect().top) this.positionAbsolute();
   }
 
   positionFixed() { 
-    this.container = document.body.querySelector('.container');
-    this.containerSize = this.container.getBoundingClientRect();
-    
-    
     this.elem.style.position = 'fixed';
     this.elem.style.zIndex = 1000;
     this.elem.style.left = this.containerSize.x + this.containerSize.width + 20 + 'px';
@@ -60,13 +59,23 @@ export default class CartIcon {
     if (parseInt(this.elem.style.left) + this.elem.getBoundingClientRect().width + 10 >= document.documentElement.clientWidth) { 
       this.elem.style.left = '';
       this.elem.style.right = '10px';
-      
     }
+    /*console.log(this.containerSize.x);
+    console.log(this.containerSize.width);
+    console.log(this.elem.getBoundingClientRect().width);
+    console.log(document.documentElement.clientWidth);
+    */
+    /*
+    if (this.containerSize.x + this.containerSize.width + this.elem.getBoundingClientRect().width + 30 >= document.documentElement.clientWidth) {
+      this.elem.style.left = document.documentElement.clientWidth - this.elem.getBoundingClientRect().width - 10 + 'px';
+    }*/
   }
 
   positionAbsolute() { 
-    this.elem.style.left = '';
-    this.elem.style.right = 0;
-    this.elem.style.position = 'absolute';
+    //this.elem.style.left = '';
+    //this.elem.style.right = 0;
+    //this.elem.style.left = this.containerSize.width - this.elem.getBoundingClientRect().width - 10 + 'px';
+    this.elem.style = '';
+    //this.elem.style.position = 'absolute';
   }
 }
