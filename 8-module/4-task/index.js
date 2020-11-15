@@ -123,9 +123,11 @@ export default class Cart {
     this.modal.setBody(modalBodyContent);
     this.modal.open();
 
-    let modalBody = document.querySelector('.modal__body');
-
-    modalBody.addEventListener('click', (evt) => this.buttonQuantityIdentification(evt));
+    this.modalBody = document.querySelector('.modal__body');
+    this.modalBody.addEventListener('click', (evt) => this.buttonQuantityIdentification(evt));
+    
+    this.formOrder = this.modalBody.querySelector('.cart-form');
+    this.formOrder.addEventListener('submit', (evt) => this.onSubmit(evt));
 
   }
 
@@ -148,7 +150,35 @@ export default class Cart {
   }
 
   onSubmit(event) {
-    // ...ваш код
+    event.preventDefault();
+    let buttonSubmit = document.querySelector('[type="submit"]');
+    buttonSubmit.classList.add('is-loading');
+
+    (async () => {
+      try {
+        let response = await fetch('https://httpbin.org/post', {
+          method: 'POST',
+          body: new FormData(this.formOrder)
+        });
+
+        if (response.status === 200) { 
+          this.modal.setTitle('Success!');
+          this.cartItems = [];
+          this.modalBody.innerHTML = `
+            <div class="modal__body-inner">
+              <p>
+                Order successful! Your order is being cooked :) <br>
+                We’ll notify you about delivery time shortly.<br>
+                <img src="/assets/images/delivery.gif">
+              </p>
+            </div>
+          `;
+        }
+      } catch (e) {
+        console.error('Ошибка отправки формы');
+      }
+    })();
+ 
   };
 
   addEventListeners() {
@@ -156,28 +186,38 @@ export default class Cart {
   }
 
   buttonQuantityIdentification = (evt) => {
-    if (Array.from(evt.target.classList).includes('cart-counter__button')) { 
-      this.buttonQuantity = evt.target;
-    };
+    
+    if (evt.target.type != 'submit') { 
 
-    if (evt.target.tagName === 'IMG' && evt.target.closest('button')) { 
-      if (Array.from(evt.target.closest('button').classList).includes('cart-counter__button')) { 
-        this.buttonQuantity = evt.target.closest('button');
+      if (Array.from(evt.target.classList).includes('cart-counter__button_minus')) { 
+        this.buttonQuantity = evt.target;
+        this.amount = -1;
+      };
+  
+      if (Array.from(evt.target.classList).includes('cart-counter__button_plus')) { 
+        this.buttonQuantity = evt.target;
+        this.amount = 1;
+      };
+  
+      if (evt.target.tagName === 'IMG' &&
+        evt.target.closest('button') &&
+        Array.from(evt.target.closest('button').classList).includes('cart-counter__button_minus')) { 
+          this.buttonQuantity = evt.target.closest('button');
+          this.amount = -1;
+      };
+  
+      if (evt.target.tagName === 'IMG' &&
+        evt.target.closest('button') &&
+        Array.from(evt.target.closest('button').classList).includes('cart-counter__button_plus')) { 
+          this.buttonQuantity = evt.target.closest('button');
+          this.amount = 1;
       }
-    }
-
-    if (Array.from(this.buttonQuantity.classList).includes('cart-counter__button_minus')) { 
-      this.amount = -1;
-    }
-
-    if (Array.from(this.buttonQuantity.classList).includes('cart-counter__button_plus')) { 
-      this.amount = 1;
-    }
-
-    if (this.buttonQuantity) { 
-      this.productId = this.buttonQuantity.closest('.cart-product').dataset.productId;
-      this.updateProductCount(this.productId, this.amount);
-    }
+  
+      if (this.buttonQuantity) { 
+        this.productId = this.buttonQuantity.closest('.cart-product').dataset.productId;
+        this.updateProductCount(this.productId, this.amount);
+      }
+    };
   }
 }
 

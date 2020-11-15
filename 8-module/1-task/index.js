@@ -60,11 +60,7 @@ export default class CartIcon {
       this.elem.style.left = '';
       this.elem.style.right = '10px';
     }
-    /*console.log(this.containerSize.x);
-    console.log(this.containerSize.width);
-    console.log(this.elem.getBoundingClientRect().width);
-    console.log(document.documentElement.clientWidth);
-    */
+
     /*
     if (this.containerSize.x + this.containerSize.width + this.elem.getBoundingClientRect().width + 30 >= document.documentElement.clientWidth) {
       this.elem.style.left = document.documentElement.clientWidth - this.elem.getBoundingClientRect().width - 10 + 'px';
