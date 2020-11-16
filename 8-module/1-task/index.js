@@ -40,6 +40,9 @@ export default class CartIcon {
 
   updatePosition() {
     this.container = document.body.querySelector('.container');
+    if (!this.container) {
+      return;
+    };
     this.containerSize = this.container.getBoundingClientRect();
 
     if (this.elem.offsetWidth === 0 || this.elem.offsetHeight === 0) return; 
