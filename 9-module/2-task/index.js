@@ -54,13 +54,17 @@ export default class Main {
     });
 
     this.addEventListeners();
-
-
   }
 
   addEventListeners() { 
     document.body.addEventListener('product-add', (evt) => this.cart.addProduct(this.products.find(item => item.id === evt.detail)));
-    document.body.querySelector('.slider').addEventListener('slider-change', () => this.productsGrid.updateFilter());
-    document.body.querySelector('.ribbon').addEventListener('ribbon-select', () => this.productsGrid.updateFilter());
+    document.body.querySelector('.slider').addEventListener('slider-change', (evt) => this.productsGrid.updateFilter({ maxSpiciness: evt.detail }));
+    document.body.querySelector('.ribbon').addEventListener('ribbon-select', (evt) => this.productsGrid.updateFilter({category: evt.detail}));
+    document.body.querySelector('#nuts-checkbox').addEventListener('change', () => this.productsGrid.updateFilter({
+      noNuts: document.body.querySelector('#nuts-checkbox').checked // новое значение чекбокса
+    }));
+    document.body.querySelector('#vegeterian-checkbox').addEventListener('change', () => this.productsGrid.updateFilter({
+      vegeterianOnly: document.body.querySelector('#vegeterian-checkbox').checked // новое значение чекбокса
+    }));
   }
 }
