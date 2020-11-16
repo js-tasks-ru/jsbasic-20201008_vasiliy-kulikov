@@ -43,7 +43,7 @@ export default class Main {
       this.productsGridContainer.innerHTML = "";
       this.productsGridContainer.append(this.productsGrid.elem);
     } else { 
-      console.error('Ошибка загрузки товаров с сервера: ' + response.status);
+      //console.error('Ошибка загрузки товаров с сервера: ' + response.status);
     }
 
     this.productsGrid.updateFilter({

@@ -57,24 +57,13 @@ export default class CartIcon {
   positionFixed() { 
     this.elem.style.position = 'fixed';
     this.elem.style.zIndex = 1000;
-    this.elem.style.left = this.containerSize.x + this.containerSize.width + 20 + 'px';
-
-    if (parseInt(this.elem.style.left) + this.elem.getBoundingClientRect().width + 10 >= document.documentElement.clientWidth) { 
-      this.elem.style.left = '';
-      this.elem.style.right = '10px';
-    }
-
-    /*
-    if (this.containerSize.x + this.containerSize.width + this.elem.getBoundingClientRect().width + 30 >= document.documentElement.clientWidth) {
-      this.elem.style.left = document.documentElement.clientWidth - this.elem.getBoundingClientRect().width - 10 + 'px';
-    }*/
+    this.elem.style.left = Math.min(
+      document.querySelector('.container').getBoundingClientRect().right + 20,
+      document.documentElement.clientWidth - this.elem.offsetWidth - 10
+    ) + "px";
   }
 
   positionAbsolute() { 
-    //this.elem.style.left = '';
-    //this.elem.style.right = 0;
-    //this.elem.style.left = this.containerSize.width - this.elem.getBoundingClientRect().width - 10 + 'px';
     this.elem.style = '';
-    //this.elem.style.position = 'absolute';
   }
 }
