@@ -197,10 +197,6 @@ describe('8-module-1-task', () => {
 
         it('иконка должна смещаться на 10px левее главного контейнера', (done) => {
           setTimeout(() => {
-            /*this.elem.style.left = Math.min(
-              document.querySelector('.container').getBoundingClientRect().right + 20,
-              document.documentElement.clientWidth - this.elem.offsetWidth - 10
-            ) + 'px';*/
 
             let actualLeftIndent = Math.round(cartIcon.elem.getBoundingClientRect().left);
             let expectedLeftIndent = document.documentElement.clientWidth - cartIcon.elem.offsetWidth - 10;
