@@ -26,10 +26,8 @@ export default class ProductGrid {
   updateFilter(filters) { 
     
     this.gridInner.innerHTML = '';
-    
-    for (let filter in filters) { 
-      this.filters[filter] = filters[filter];
-    }
+
+    Object.assign(this.filters, filters);
 
     this.targetProducts = this.products;
 
