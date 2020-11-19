@@ -28,7 +28,7 @@ export default class RibbonMenu {
   }
 
   clickLink() { 
-      for (let link of this.links) { 
+      /*for (let link of this.links) { 
         link.addEventListener('click', (evt) => { 
           evt.preventDefault();
 
@@ -40,7 +40,21 @@ export default class RibbonMenu {
 
           this.filterCategory(link);
         })
-      }    
+      }*/
+    this.ribbonInner.addEventListener('click', evt => { 
+      evt.preventDefault();
+
+      if (evt.target.tagName === 'A') {       
+
+          for (let item of this.links) { 
+            item.classList.remove('ribbon__item_active');
+          }
+
+          evt.target.classList.add('ribbon__item_active');
+
+          this.filterCategory(evt.target);
+      }
+    })
   }
 
   scrollMenu = () => { 
